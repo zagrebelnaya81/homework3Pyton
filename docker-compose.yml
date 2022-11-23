@@ -1,0 +1,17 @@
+version: "3.3"
+services:
+  bot:
+    container_name: bot
+    image: bot:latest
+    restart: always
+    environment:
+      USER: "Suuser"
+      API_KEY: 5871758425:AAEMyHy831NSw88zn65aryGRR54uzblUS70
+    ports:
+      - "10081:80"
+    networks:
+      - bot
+
+networks:
+  bot:
+    driver: bridge
