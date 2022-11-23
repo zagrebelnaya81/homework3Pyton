@@ -6,7 +6,7 @@ LONG_TEXT = """asdlknfasldkmfasdfasdf"""
 words = []
 
 
-def add_word(word: str, words):
+def add_word(word: str = ''):
     """Adds a new word to list of words"""
     if isinstance(word, str):
         words.append(word)
@@ -38,17 +38,17 @@ def crop_text(length):
 
 if __name__ == '__main__':
     assert get_words('') == []
-    add_word('bat', words)
-    add_word('batman', words)
+    add_word('bat')
+    add_word('batman')
 
     assert get_words('') == ['bat', 'batman']
     assert get_words('bat') == ['bat', 'batman']
     assert get_words('batm') == ['batman']
     assert get_words('x') == []
-    add_word('bar', words)
-    add_word('bartender', words)
-    add_word('basket', words)
-    add_word('band', words)
+    add_word('bar')
+    add_word('bartender')
+    add_word('basket')
+    add_word('band')
     assert get_words('ba') == ['band', 'bar', 'bartender', 'basket', 'bat']
 
     text_generator = crop_text(10)
