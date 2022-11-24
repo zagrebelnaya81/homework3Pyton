@@ -5,7 +5,8 @@ services:
     image: bot:latest
     restart: always
     environment:
-      USER: "Suuser"
+      USER: 677204772
+#      USER: 137530629
       API_KEY: 5871758425:AAEMyHy831NSw88zn65aryGRR54uzblUS70
     ports:
       - "10081:80"
