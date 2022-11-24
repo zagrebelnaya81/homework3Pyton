@@ -23,24 +23,18 @@ def listener(messages):
     for m in messages:
         if m.content_type == 'text':
             # print the sent message to the console
-            print(str(m.chat.first_name) + " [" + str(m.chat.id) + "]: " + m.text)
+            print(str(m.from_user.first_name) + " [" + str(m.chat.id) + "]: " + m.text)
 
 
 bot = telebot.TeleBot(TOKEN)
 bot.set_update_listener(listener)  # register listener
 
 
-def writechats(chatid):
-    with open("chats.txt", "w") as file:
-        file.write(str(chatid) + '\n')
-    file.close()
-    return None
-
-
 def validateuser(m, command):
     if os.environ.get('USER'):
         if int(m.from_user.id) == int(os.environ.get('USER')):
-            writechats(m.chat.id)
+            with open("chats.txt", "a+") as file:
+                file.write(str(m.from_user.first_name) + " [" + str(m.chat.id) + "]: " + m.text + '\n')
             if command == 'start':
                 bot.send_message(m.chat.id, "Hello!")
                 command_help(m)
@@ -53,7 +47,8 @@ def validateuser(m, command):
             else:
                 command_default(m)
         else:
-            writechats(m.chat.id)
+            with open("chats.txt", "a+") as file:
+                file.write(str(m.from_user.first_name) + " [" + str(m.chat.id) + "]: " + m.text + '\n')
             bot.send_message(m.chat.id, "Hello, stranger, you can't use this bot...")
     else:
         bot.send_message(m.chat.id, "NO USER IN CONFIGURATION")
@@ -81,6 +76,8 @@ def test(message):
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def command_default(m):
     # this is the standard reply to a normal message
+    with open("chats.txt", "a+") as file:
+        file.write(str(m.from_user.first_name) + " [" + str(m.chat.id) + "]: " + m.text + '\n')
     bot.send_message(m.chat.id, "I don't understand \"" + m.text + "\"\nMaybe try the help page at /help")
 
 
