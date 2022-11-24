@@ -20,20 +20,19 @@ def get_words(chars: str):
     final = []
     if isinstance(chars, str):
         for word in words:
-            index = word.find(chars)
-            if index >= 0:
+            if word.startswith(chars):
                 final.append(word)
         final.sort()
         return final[:5]
     return "word is not object of str class"
 
 
-def crop_text(length):
+def crop_text(length, i: int = 0):
     """Generator yields a text piece of specified length or less"""
-    while True:
-        yield LONG_TEXT[:length]
-        yield LONG_TEXT[length:length*2]
-        yield LONG_TEXT[length*2:]
+    while i*length <= len(LONG_TEXT):
+        part = LONG_TEXT[i*length:i*length+length]
+        i += 1
+        yield part
 
 
 if __name__ == '__main__':
@@ -50,8 +49,11 @@ if __name__ == '__main__':
     add_word('basket')
     add_word('band')
     assert get_words('ba') == ['band', 'bar', 'bartender', 'basket', 'bat']
-
     text_generator = crop_text(10)
     assert next(text_generator) == "asdlknfasl"
     assert next(text_generator) == "dkmfasdfas"
     assert next(text_generator) == "df"
+    pieces = []
+    for piece in crop_text(4):
+        pieces.append(piece)
+    assert pieces == ['asdl', 'knfa', 'sldk', 'mfas', 'dfas', 'df']
