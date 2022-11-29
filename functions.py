@@ -4,20 +4,9 @@ high level support for doing this and that.
 
 import random
 
-i = 0
 
-
-def print_square(length: int):
+def print_square(length: int, i: int = 0):
     """ Function will display a square of the given size on the screen """
-    global i
-
-    # Plint говорит что нельзя допускать глобальные переменные.
-    # Пыталась сделать по правильному классом. Но не знаю как
-    # сделать рекурсию в  функции если она в классе
-    # файл functions_class. Ошибка print_square() takes 2 positional
-    # arguments but 3 were given
-    # Думаю что функцию можно было сделать лучше, но это пока все на что
-    # я способна в питоне:)))))))))))))))))))
 
     if length == 1:
         print("*")
@@ -32,7 +21,7 @@ def print_square(length: int):
         print("* " * length)
     i = i+1
     if i < length-2:
-        print_square(length)
+        print_square(length, i)
 
 
 # decoration  function
@@ -81,6 +70,8 @@ def get_random_values(choices, size=2):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_square(7)
+    print_square(10)
+
     result1 = get_random_value()
     print(result1)
     result2 = get_random_values([1, 2, 3, 4])

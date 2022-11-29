@@ -67,9 +67,14 @@ def command_help(m):
     validateuser(m, "help")
 
 
-@bot.message_handler(commands=['test'])
+@bot.message_handler(commands=['getid'])
 def test(message):
-    bot.send_message(message.chat.id, message)
+    bot.send_message(message.chat.id, message.from_user)
+
+@bot.message_handler(commands=['kick'])
+def kick(message):
+    if message.reply_to_message:
+        bot.kick_chat_member(message.chat.id, message.reply_to_message.from_user.id)
 
 
 # default handler for every other text
