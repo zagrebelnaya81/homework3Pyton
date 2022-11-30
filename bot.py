@@ -71,10 +71,14 @@ def command_help(m):
 def test(message):
     bot.send_message(message.chat.id, message.from_user)
 
-@bot.message_handler(commands=['kick'])
-def kick(message):
-    if message.reply_to_message:
-        bot.kick_chat_member(message.chat.id, message.reply_to_message.from_user.id)
+@bot.message_handler(commands=['kill!'])
+def kill(message):
+    username = message.text[message.text.find('@'):]
+    try:
+        bot.kick_chat_member(message.chat.id, message.from_user.id)
+        bot.send_message(message.chat.id, username + " was deleted from chart")
+    except TypeError:
+        bot.send_message(message.chat.id, username + " was can't be deleted from chart ERROR!")
 
 
 # default handler for every other text

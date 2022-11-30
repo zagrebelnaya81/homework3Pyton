@@ -1,12 +1,6 @@
 """Lesson 6"""
-WORDS =  {}
+WORDS = {}
 dict_arr = []
-
-
-def rev_str(my_str):
-    length = len(my_str)
-    for i in range(length):
-        yield my_str[i]
 
 
 def flatten(arr):
@@ -34,19 +28,16 @@ def grep(pattern):
             yield line
 
 
-def add_word(word, i=0):
-    arr = []
+def add_word(word):
     """Method that adds a word into a dict of words in a specific way (see examples below)"""
-    if isinstance(word, str):
-        for char in rev_str(word):
-            arr.append(char)
-        #  WORDS.update({arr[0]: {arr[1]: {arr[2]: {arr[3]: {arr[4]: {"TERM": word}}}}}})
-        for key in arr:
-            if len(arr) > i:
-                WORDS.update({arr[i]: {arr[i + 1]}})
-                i += 1
-        return WORDS
-    return "word is not object of str class"
+    first_dict = {"TERM": word}
+    for char in range(0, len(word)):
+        first_dict = {word[len(word)-1-char]: first_dict}
+        second_dict = first_dict
+        if len(word) <= char:
+            second_dict = {word[char + 1]: 1}
+    WORDS.update(first_dict)
+    return WORDS
 
 
 def get_dict_values_in_arr(words):
@@ -93,14 +84,14 @@ if __name__ == '__main__':
     assert search.send('but you better be quick (bbq) otherwise') == \
            'but you better be quick (bbq) otherwise'
     search.close()
-
     print(add_word('hello'))
-    # assert WORDS == {'h': {'e': {'l': {'l': {'o': {'TERM': 'hello'}}}}}}
-    # add_word('hell')
+    assert WORDS == {'h': {'e': {'l': {'l': {'o': {'TERM': 'hello'}}}}}}
+    print(add_word('hell'))
     # assert WORDS == {'h': {'e': {'l': {'l': {'o': {'TERM': 'hello'}, 'TERM': 'hell'}}}}}
-    # add_word('he')
+    print(add_word('he'))
+    # НА ЭТОМ  Я СДАЛАСЬ!!!!!!!!!!!!!!!!!!
     # assert WORDS == {'h': {'e': {'l': {'l': {'o': {'TERM': 'hello'}, 'TERM': 'hell'}},
-    # 'TERM': 'he'}}}
+    #                              'TERM': 'he'}}}
 
     # assert set(get_words('he')) == {'he', 'hell', 'hello'}
     # assert get_words('l') == []
