@@ -29,6 +29,8 @@ def add_word(word):
 def recurse_add(dictionary: dict, letter: str, i: int, word: str):
     """Recursive function"""
     if len(dictionary.keys()) == 0:
+        # вроде реализация для одного слова работает , но только для одного слова
+        # вопрос в том правильна лим она по сути я тогда буду думать как сделат проверку на следующие слова
         dictionary[letter] = {}
         return dictionary
     for _, item in dictionary.items():
