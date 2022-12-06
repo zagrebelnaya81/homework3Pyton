@@ -2,16 +2,19 @@ import os
 
 import time
 
+import logging
 import telebot
 from telebot import types
 
 
+logger = logging.getLogger('logger')
+logger.setLevel(logging.DEBUG)
 TOKEN = os.environ.get('API_KEY')
-
+users = {}
 commands = {  # command description used in the "help" command
     'start': 'Get used to the bot',
     'help': 'Gives you information about the available commands',
-    'test': 'try to test message'
+    'getid': 'try to test message'
 }
 
 
@@ -31,28 +34,18 @@ bot.set_update_listener(listener)  # register listener
 
 
 def validateuser(m, command):
-    if os.environ.get('USER'):
-        if int(m.from_user.id) == int(os.environ.get('USER')):
-            with open("chats.txt", "a+") as file:
-                file.write(str(m.from_user.first_name) + " [" + str(m.chat.id) + "]: " + m.text + '\n')
-            if command == 'start':
-                bot.send_message(m.chat.id, "Hello!")
-                command_help(m)
-            elif command == 'help':
-                help_text = "The following commands are available: \n"
-                for key in commands:  # generate help text out of the commands dictionary defined at the top
-                    help_text += "/" + key + ": "
-                    help_text += commands[key] + "\n"
-                bot.send_message(m.chat.id, help_text)  # send the generated help page
-            else:
-                command_default(m)
+        users.update({m.from_user.username: m.from_user.id})
+        if command == 'start':
+            bot.send_message(m.chat.id, "Hello!")
+            command_help(m)
+        elif command == 'help':
+            help_text = "The following commands are available: \n"
+            for key in commands:  # generate help text out of the commands dictionary defined at the top
+                help_text += "/" + key + ": "
+                help_text += commands[key] + "\n"
+            bot.send_message(m.chat.id, help_text)  # send the generated help page
         else:
-            with open("chats.txt", "a+") as file:
-                file.write(str(m.from_user.first_name) + " [" + str(m.chat.id) + "]: " + m.text + '\n')
-            bot.send_message(m.chat.id, "Hello, stranger, you can't use this bot...")
-    else:
-        bot.send_message(m.chat.id, "NO USER IN CONFIGURATION")
-    return None
+            command_default(m)
 
 
 # handle the "/start" command
@@ -68,8 +61,15 @@ def command_help(m):
 
 
 @bot.message_handler(commands=['getid'])
-def test(message):
-    bot.send_message(message.chat.id, message.from_user)
+def getid(m):
+    users.update({m.from_user.username: m.from_user.id})
+    bot.send_message(m.chat.id, m.from_user.id)
+
+
+@bot.message_handler(commands=['getuserslist'])
+def getuserslist(m):
+        bot.send_message(m.chat.id, users.keys())
+
 
 @bot.message_handler(commands=['kill!'])
 def kill(message):
@@ -85,8 +85,7 @@ def kill(message):
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def command_default(m):
     # this is the standard reply to a normal message
-    with open("chats.txt", "a+") as file:
-        file.write(str(m.from_user.first_name) + " [" + str(m.chat.id) + "]: " + m.text + '\n')
+    users.update({m.from_user.username: m.from_user.id})
     bot.send_message(m.chat.id, "I don't understand \"" + m.text + "\"\nMaybe try the help page at /help")
 
 
