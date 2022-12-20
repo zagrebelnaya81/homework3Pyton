@@ -39,27 +39,28 @@ def run_stuff():
         "3": division,
         "4": multiply
     }
-    firstvar = args[0]
-    secondvar = args[1]
+
     if len(args) == 2:
         function_number = '1'
     else:
         function_number = args[2]
 
-    if not isinstance(firstvar, int) or not isinstance(secondvar, int):
-        print("Wrong function arguments")
-        sys.exit(2)
-
-    firstarg = int(firstvar)
-    secondarg = int(secondvar)
-
-
-
     if function_number not in functions:
         print("Wrong function number")
         sys.exit(2)
 
-    functions[function_number](firstarg, secondarg)
+    try:
+        int(args[0])
+    except (ValueError, IndexError):
+        print("Wrong function arguments")
+        sys.exit(2)
+    try:
+        int(args[1])
+    except (ValueError, IndexError):
+        print("Wrong function arguments")
+        sys.exit(2)
+
+    functions[function_number](int(args[0]),  int(args[1]))
 
 
 if __name__ == '__main__':
