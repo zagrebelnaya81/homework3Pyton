@@ -1,4 +1,5 @@
 '''os and sys'''
+import os
 import sys
 import argparse
 
@@ -33,12 +34,7 @@ def run_stuff():
                         help="first variable")
     parser.add_argument("--second", type=int,
                         help="second variable")
-    parser.add_argument(
-        '--function_number',
-        type=str,
-        default='1',
-        help='provide an integer (default: 1)'
-    )
+
     args = parser.parse_args()
 
     if not args.first or not args.second:
@@ -68,19 +64,22 @@ def run_stuff():
         sys.exit(2)
 
     functions = {
-        "1": addition,
-        "2": subtraction,
-        "3": division,
-        "4": multiply
+        "addition": addition,
+        "subtraction": subtraction,
+        "division": division,
+        "multiply": multiply
     }
 
-    function_number = args.function_number
+    function_name = os.getenv("FUNCTION")
+    print(function_name)
+    if not function_name:
+        function_name = 'addition'
 
-    if function_number not in functions:
+    if function_name not in functions:
         print("Wrong function number")
         sys.exit(2)
 
-    functions[function_number](args.first, args.second)
+    functions[function_name](args.first, args.second)
     return None
 
 

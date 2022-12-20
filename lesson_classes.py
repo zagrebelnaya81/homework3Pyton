@@ -1,5 +1,5 @@
 class Course:
-    def __init__(self, name, start_date, number_of_lectures, teacher, *teachers):
+    def __init__(self, name, start_date, number_of_lectures, teacher):
         self.name = name   #назву курсу;
         self.start_date = start_date #початкову дату;
         self.lectures = [] #lections;
@@ -7,19 +7,7 @@ class Course:
         self.teacher = teacher  #основного викладача;
         self.enrolled_students = [] # students
         self.homeworks = [] #домашні завдання.
-        self.lectures = [Lecture("Lecture 1", 1, main_teacher), Lecture("Lecture 2", 2, main_teacher),
-                    Lecture("Lecture 3", 3, main_teacher),
-                    Lecture("Lecture 4", 4, main_teacher), Lecture("Lecture 5", 5, main_teacher),
-                    Lecture("Lecture 6", 6, main_teacher), Lecture("Lecture 7", 7, main_teacher),
-                    Lecture("Lecture 8", 8, main_teacher),
-                    Lecture("Lecture 9", 9, main_teacher), Lecture("Lecture 10", 10, main_teacher),
-                    Lecture("Lecture 11", 1, main_teacher),
-                    Lecture("Lecture 12", 12, main_teacher), Lecture("Lecture 13", 13, main_teacher),
-                    Lecture("Lecture 14", 14, main_teacher), Lecture("Lecture 15", 15, main_teacher),
-                    Lecture("Lecture 16", 16, main_teacher)]
-
-        for _lecture in self.lectures:
-            _lecture.teachers_lectures = self
+        self._students_on_course = []
 
     def __len__(self):
         # вернуть количество лекций
@@ -35,10 +23,8 @@ class Course:
 
     '''Якщо    студент    додається    на    курс, його    можна    побачити    в    списку    студентів, що    записалися;    '''
 
-    @property
     def enrolled_by(self):
-        print(self.enrolled_students)
-        return self.enrolled_students
+        return self._students_on_course
 
     def get_lecture(self, number):
             if isinstance(number, int):
@@ -104,7 +90,8 @@ class Teacher:
     def __init__(self, first_name, last_name):
         self.first_name = first_name  # імʼя;
         self.last_name = last_name   # прізвище;
-        self.teaching_lectures = [] #лекції, які він веде;
+        self.teaching_lectures =[]#лекції, які він веде;
+
         self.homeworks_to_check = []#домашні завдання, які треба перевірити;
 
     def __repr__(self):
@@ -113,13 +100,6 @@ class Teacher:
     def __str__(self):
         return self.__repr__()
 
-    # @property
-    # def teaching_lectures(self):
-    #     return self.teaching_lectures
-
-    # @teaching_lectures.setter
-    # def teaching_lectures(self, lecture):
-    #     self.teaching_lectures.append(lecture)
 
 
 if __name__ == '__main__':
@@ -128,12 +108,25 @@ if __name__ == '__main__':
 
     python_basic = Course('Python basic', '31.10.2022', 16, main_teacher)
 
+    python_basic.lectures = [
+        Lecture("Lecture 1", 1, main_teacher), Lecture("Lecture 2", 2, main_teacher),
+        Lecture("Lecture 3", 3, main_teacher),
+        Lecture("Lecture 4", 4, main_teacher), Lecture("Lecture 5", 5, main_teacher),
+        Lecture("Lecture 6", 6, main_teacher), Lecture("Lecture 7", 7, main_teacher),
+        Lecture("Lecture 8", 8, main_teacher),
+        Lecture("Lecture 9", 9, main_teacher), Lecture("Lecture 10", 10, main_teacher),
+        Lecture("Lecture 11", 1, main_teacher),
+        Lecture("Lecture 12", 12, main_teacher), Lecture("Lecture 13", 13, main_teacher),
+        Lecture("Lecture 14", 14, main_teacher), Lecture("Lecture 15", 15, main_teacher),
+        Lecture("Lecture 16", 16, main_teacher)
+    ]
     assert len(python_basic.lectures) == python_basic.number_of_lectures
 
     assert str(python_basic) == 'Python basic (31.10.2022)'
     assert python_basic.teacher == main_teacher
 
-    # assert python_basic.enrolled_by() == []
+    assert python_basic.enrolled_by() == []
+
 
     # assert main_teacher.teaching_lectures() == python_basic.lectures
     #
