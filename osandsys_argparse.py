@@ -44,19 +44,28 @@ def run_stuff():
     if not args.first or not args.second:
         print('We need actually 2 arguments!')
         sys.exit(2)
+
+    # У меня вопрос. Смотрите, я пытаюсь разобраться с библиотекой
+    # argparse. Для того чтоб обрабатывать самой
+    # ошибки количества параметров и тд я сделала их всех опциональными
+    # так как при недостаточном вводе параметров библиотека
+    # дает ошибки, что не хватает параметров и тд.
+    # Пытаюсь проверить на тип параметров, библиотека выдает ошибку.
+    # Но почему-то не ловит мой обработчик
+    # ошибок. Не очень понимаю как здесь отловить эти ошибки правильно
     try:
         if isinstance(args.first, int):
             return args.first
-    except (ValueError, IndexError, TypeError) as e:
-        print(e)
-    raise argparse.ArgumentTypeError('%s is not a valid argument' % (args.first,))
+    except (ValueError, IndexError, TypeError):
+        print("Wrong function arguments")
+        sys.exit(2)
 
     try:
         if isinstance(args.second, int):
             return args.second
-    except (ValueError, IndexError, TypeError) as e:
-        print(e)
-    raise argparse.ArgumentTypeError('%s is not a valid argument' % (args.second,))
+    except (ValueError, IndexError, TypeError):
+        print("Wrong function arguments")
+        sys.exit(2)
 
     functions = {
         "1": addition,
@@ -72,6 +81,7 @@ def run_stuff():
         sys.exit(2)
 
     functions[function_number](args.first, args.second)
+    return None
 
 
 if __name__ == '__main__':

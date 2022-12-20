@@ -61,6 +61,7 @@ def run_stuff():
         sys.exit(2)
 
     functions[function_number](int(args[0]),  int(args[1]))
+    return None
 
 
 if __name__ == '__main__':
