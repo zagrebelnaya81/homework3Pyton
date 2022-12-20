@@ -1,6 +1,6 @@
 '''os and sys'''
 import sys
-
+import os
 
 def addition(first: int, second: int):
     ''' addition '''
@@ -28,24 +28,23 @@ def multiply(first: int, second: int):
 def run_stuff():
     '''run all staff'''
     args = sys.argv[1:]
-    function_number = None
+
+    function_name = os.getenv('FUNCTION')
     if len(args) < 2:
         print('We need actually 2 arguments!')
         sys.exit(2)
 
     functions = {
-        "1": addition,
-        "2": subtraction,
-        "3": division,
-        "4": multiply
+        "addition": addition,
+        "subtraction": subtraction,
+        "division": division,
+        "multiply": multiply
     }
 
-    if len(args) == 2:
-        function_number = '1'
-    else:
-        function_number = args[2]
+    if not function_name:
+        function_name = 'addition'
 
-    if function_number not in functions:
+    if function_name not in functions:
         print("Wrong function number")
         sys.exit(2)
 
@@ -60,7 +59,7 @@ def run_stuff():
         print("Wrong function arguments")
         sys.exit(2)
 
-    functions[function_number](int(args[0]),  int(args[1]))
+    functions[function_name](int(args[0]),  int(args[1]))
     return None
 
 
