@@ -9,12 +9,13 @@ class Course:
         self.teacher = teacher  #основного викладача;
         self.enrolled_students = [] # students
         self.lectures = []
-        self.lecture_generator()
+        self._lecture_generator()
 
-    def lecture_generator(self):
+
+    def _lecture_generator(self):
         '''lecture_generator'''
-        for i in range(1, 17):
-            self.lectures.append(Lecture("Lecture " + str(i), i, main_teacher))
+        for i in range(self.number_of_lectures):
+            self.lectures.append(Lecture("Lecture " + str(i), i, self.teacher))
 
     def __repr__(self):
         '''__repr__ '''
@@ -53,16 +54,16 @@ class Course:
         return homeworks
 
 
+
 class Lecture:
     '''lecture '''
-    def __init__(self, name, number, teacher, *students):
+    def __init__(self, name, number, teacher):
         '''lecture '''
         self.name = name  #назву
         self.number = number  #порядковий номер лекції;
         self.teacher = teacher #викладача, що її веде;
         self.homework = None #домашнє завдання.
         teacher.teaching_lectures = self
-        self.students = students
 
     def new_teacher(self, substitute_teacher):
         '''new_teacher '''
@@ -71,10 +72,10 @@ class Lecture:
         self.teacher.add_lecture(self)
         return self.teacher
 
-    def set_homework(self, homework):
+    def set_homework(self, homework, students):
         '''set_homework '''
-        for _student in students:
-            _student.assigned_homeworks.append(homework)
+        for student in students:
+            student.assigned_homeworks.append(homework)
         self.homework = homework
         return self.homework
 
@@ -112,6 +113,7 @@ class Student:
         self.first_name = first_name  # імʼя;
         self.last_name = last_name# прізвище;
         self.assigned_homeworks = []# назначені  домашні завдання.
+
     def __repr__(self):
         '''__repr__ '''
         return f'Student: {student.first_name} {student.last_name}'
@@ -122,14 +124,15 @@ class Student:
 
     def enroll(self, course):
         '''enroll '''
+        student.lectures = course.lectures
         course.enrolled_students.append(self)
 
-    def do_homework(self, homework):
+    def do_homework(self, homework, teacher):
         '''do_homework '''
+        teacher.homeworks_to_check.append(homework)
         self.assigned_homeworks.remove(homework)
         homework.done_by_student[self] = None
         return self.assigned_homeworks
-
 
 class Teacher:
     '''Teacher '''
@@ -221,18 +224,17 @@ if __name__ == '__main__':
     assert third_lecture.get_homework() is None
     functions_homework = Homework('Functions', 'what to do here')
     assert str(functions_homework) == 'Functions: what to do here'
-    third_lecture.set_homework(functions_homework)
+    third_lecture.set_homework(functions_homework, students)#???
 
     assert python_basic.get_homeworks() == [functions_homework]
     assert third_lecture.get_homework() == functions_homework
-    third_lecture.students = students
+
     for student in students:
         assert student.assigned_homeworks == [functions_homework]
     assert not main_teacher.homeworks_to_check
 
-    students[0].do_homework(functions_homework)
+    students[0].do_homework(functions_homework, main_teacher)
 
-    main_teacher.homeworks_to_check = [functions_homework]
     assert not students[0].assigned_homeworks
     assert students[1].assigned_homeworks == [functions_homework]
     assert functions_homework.done_by() == {students[0]: None}
